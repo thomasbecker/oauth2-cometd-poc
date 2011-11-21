@@ -4,7 +4,7 @@
 <meta
   http-equiv="Content-Type"
   content="text/html;charset=utf-8" />
-<title>SoundCloud OAuth 2 User Agent Authentication Flow Demo</title>
+<title>OAuth2 - CometD ClientSide Authentication Flow POC</title>
 <script
   type="text/javascript"
   src="${pageContext.request.contextPath}/jquery/jquery-1.6.2.js"></script>

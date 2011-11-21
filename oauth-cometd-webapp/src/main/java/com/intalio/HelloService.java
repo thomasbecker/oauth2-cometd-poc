@@ -19,22 +19,15 @@ package com.intalio;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cometd.bayeux.ChannelId;
 import org.cometd.bayeux.Message;
-import org.cometd.bayeux.server.Authorizer;
 import org.cometd.bayeux.server.BayeuxServer;
-import org.cometd.bayeux.server.ServerMessage;
 import org.cometd.bayeux.server.ServerSession;
 import org.cometd.server.AbstractService;
-import org.cometd.server.DefaultSecurityPolicy;
 
-import com.intalio.cometdoauth.service.OauthService;
-import com.intalio.cometdoauth.service.impl.GoogleOauthServiceImpl;
+import com.intalio.cometd.OAuthAuthenticator;
 
 public class HelloService extends AbstractService
 {
-    private OauthService oauthService = new GoogleOauthServiceImpl();
-
     public HelloService(BayeuxServer bayeux)
     {
         super(bayeux,"hello");
@@ -52,50 +45,4 @@ public class HelloService extends AbstractService
         remote.deliver(getServerSession(),"/hello",output,null);
     }
 
-    private class OAuthAuthorizer implements Authorizer
-    {
-        public Result authorize(Operation arg0, ChannelId arg1, ServerSession arg2, ServerMessage arg3)
-        {
-            System.out.println("DENYING!!!");
-            return Result.deny("NO WAY DUDE!");
-        }
-    }
-
-    private class OAuthAuthenticator extends DefaultSecurityPolicy implements ServerSession.RemoveListener
-    {
-        @Override
-        public boolean canHandshake(BayeuxServer server, ServerSession session, ServerMessage message)
-        {
-            if (session.isLocalSession())
-                return true;
-
-            Map<String, Object> ext = message.getExt();
-            if (ext == null)
-                return false;
-
-            Map<String, Object> authentication = (Map<String, Object>)ext.get("authentication");
-            if (authentication == null)
-                return false;
-
-            String token = (String)authentication.get("oauthAccessToken");
-
-            // Authentication successful
-            if (oauthService.validateAccessToken(token))
-            {
-                System.out.println("TOKEN VALID!!!");
-                // Be notified when the session disappears
-                session.addListener(this);
-                return true;
-            }
-
-            // Link authentication data to the session
-
-            return true;
-        }
-
-        public void removed(ServerSession session, boolean expired)
-        {
-            // Unlink authentication data from the remote client (8)
-        }
-    }
 }

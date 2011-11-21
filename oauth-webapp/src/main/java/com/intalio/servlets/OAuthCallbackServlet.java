@@ -14,7 +14,6 @@
 package com.intalio.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,11 +36,12 @@ public class OAuthCallbackServlet extends HttpServlet
         if (authCode != null)
         {
             String accessToken = oAuthService.getAccessToken(authCode);
-            res.setContentType("text/html");
-            PrintWriter out = res.getWriter();
-            out.println("<HTML><HEAD><TITLE>Hello Client!</TITLE>" + "</HEAD><BODY>Hello Client! Your token is: " + accessToken + " and it is valid: "
-                    + oAuthService.validateAccessToken(accessToken) + "</BODY></HTML>");
-            out.close();
+//            res.setContentType("text/html");
+//            PrintWriter out = res.getWriter();
+//            out.println("<HTML><HEAD><TITLE>Hello Client!</TITLE>" + "</HEAD><BODY>Hello Client! Your token is: " + accessToken + " and it is valid: "
+//                    + oAuthService.validateAccessToken(accessToken) + "</BODY></HTML>");
+//            out.close();
+            res.sendRedirect("http://tbecker2.dyndns.org/oauth-cometd-webapp/oauth_webserver.jsp#access_token=" + accessToken);
         }
     }
 

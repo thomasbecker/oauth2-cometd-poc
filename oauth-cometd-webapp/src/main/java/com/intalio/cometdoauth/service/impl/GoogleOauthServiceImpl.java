@@ -19,7 +19,7 @@ import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.http.HttpStatus;
 
-import com.intalio.cometdoauth.service.OauthService;
+import com.intalio.cometd.OauthService;
 
 /* ------------------------------------------------------------ */
 /**
